@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "NodeNext",
+    "noImplicitAny": true,
+    "module": "NodeNext",
+    "target": "es5",
+    "allowJs": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "emitDeclarationOnly": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts"]
+}
