@@ -4,8 +4,8 @@
 import { Plugin, Container, Declaration, Root } from 'postcss';
 import createPxReplace from './createPxReplace';
 import generateRegex from './generateRegex';
-
-type FunctionalOptions<T> = { [Key in keyof T]: T[Key] extends Record<string, number> ? FunctionalOptions<T[Key]> : T[Key] | ((root: Root) => T[Key]) }
+type FunctionalExtend<T> = { [Key in keyof T]: T[Key] | ((root: Root) => T[Key]) };
+type FunctionalOptions = FunctionalExtend<Options>
 type Options = {
   rootValue?: number | Record<string, number>;
   unitPrecision?: number;
@@ -56,21 +56,15 @@ const blacklistedProp = (blacklist: (string | RegExp)[], prop: string) => {
   });
 };
 
-function generateOptions(options: FunctionalOptions<Options>, root: Root): Options {
-  function isRecordNumber(val: unknown) {
-    return typeof val === "object" && val !== null && Object.keys(val).length !== 0 && Object.keys(val).every((key) => typeof (val as any)[key] === "number")
-  }
-  function innerFunc(obj: Record<string, any>) {
-    return Object.entries(obj).reduce((prev, [key, value]) => { prev[key] = typeof value === 'function' ? value(root) : isRecordNumber(value) ? innerFunc(value) : value; return prev; }, {} as any)
-  }
+function generateOptions(options: FunctionalOptions, root: Root): Options {
   return {
-    ...defaultOpts, ...(innerFunc(options))
+    ...defaultOpts, ...(Object.entries(options).reduce((prev, [key, value]) => { prev[key] = typeof value === 'function' ? value(root) : value; return prev; }, {} as any))
   }
 }
 
 
 
-const px2rem = (options?: FunctionalOptions<Options>): Plugin => {
+const px2rem = (options?: FunctionalOptions): Plugin => {
   return {
     postcssPlugin: 'postcss-plugin-px2rem-ts',
     Once: (root) => {

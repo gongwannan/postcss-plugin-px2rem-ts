@@ -3,7 +3,6 @@ import expect from 'expect';
 import { default as px2rem, type Options, type FunctionalOptions } from './src/index';
 
 const basicCSS = '.rule { font-size: 15px }';
-type FunctionOptions = FunctionalOptions<Options>
 describe('px2rem', () => {
   it('should work on the readme example', () => {
     const input = 'h1 { margin: 0 0 20px 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }';
@@ -30,7 +29,7 @@ describe('px2rem', () => {
   it('should handle < 1 values and values without a leading 0', () => {
     const rules = '.rule { margin: 0.5rem .5px -0.2px -.2em }';
     const expected = '.rule { margin: 0.5rem 0.005rem -0.002rem -.2em }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: ['margin'],
     };
     const processed = postcss(px2rem(options)).process(rules).css;
@@ -48,7 +47,7 @@ describe('px2rem', () => {
 
 describe('value parsing', () => {
   it('should not replace values in double quotes or single quotes', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: [],
     };
     const rules = '.rule { content: \'16px\'; font-family: "16px"; font-size: 16px; }';
@@ -59,7 +58,7 @@ describe('value parsing', () => {
   });
 
   it('should not replace values in `url()`', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: [],
     };
     const rules = '.rule { background: url(16px.jpg); font-size: 16px; }';
@@ -73,7 +72,7 @@ describe('value parsing', () => {
 describe('rootValue', () => {
   it('should replace using a root value of 10', () => {
     const expected = '.rule { font-size: 1.5rem }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       rootValue: 10,
     };
     const processed = postcss(px2rem(options)).process(basicCSS).css;
@@ -85,7 +84,7 @@ describe('rootValue', () => {
 describe('unitPrecision', () => {
   it('should replace using a decimal of 2 places', () => {
     const expected = '.rule { font-size: 0.94rem }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       rootValue: 16,
       unitPrecision: 2,
     };
@@ -98,7 +97,7 @@ describe('unitPrecision', () => {
 describe('propWhiteList', () => {
   it('should only replace properties in the white list', () => {
     const expected = '.rule { font-size: 15px }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: ['font'],
     };
     const processed = postcss(px2rem(options)).process(basicCSS).css;
@@ -109,7 +108,7 @@ describe('propWhiteList', () => {
   it('should replace all properties when white list is empty', () => {
     const rules = '.rule { margin: 16px; font-size: 15px }';
     const expected = '.rule { margin: 0.16rem; font-size: 0.15rem }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: [],
     };
     const processed = postcss(px2rem(options)).process(rules).css;
@@ -121,7 +120,7 @@ describe('propWhiteList', () => {
 describe('propBlackList', () => {
   it('should not replace properties in the black list', () => {
     const expected = '.rule { font-size: 15px }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propBlackList: ['font'],
     };
     const processed = postcss(px2rem(options)).process(basicCSS).css;
@@ -134,7 +133,7 @@ describe('selectorBlackList', () => {
   it('should ignore selectors in the selector black list', () => {
     const rules = '.rule { font-size: 15px } .rule2 { font-size: 15px }';
     const expected = '.rule { font-size: 0.15rem } .rule2 { font-size: 15px }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       selectorBlackList: ['.rule2'],
     };
     const processed = postcss(px2rem(options)).process(rules).css;
@@ -145,7 +144,7 @@ describe('selectorBlackList', () => {
   it('should ignore every selector with `body$`', () => {
     const rules = 'body { font-size: 16px; } .class-body$ { font-size: 16px; } .simple-class { font-size: 16px; }';
     const expected = 'body { font-size: 0.16rem; } .class-body$ { font-size: 16px; } .simple-class { font-size: 0.16rem; }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       selectorBlackList: ['body$'],
     };
     const processed = postcss(px2rem(options)).process(rules).css;
@@ -156,7 +155,7 @@ describe('selectorBlackList', () => {
   it('should only ignore exactly `body`', () => {
     const rules = 'body { font-size: 16px; } .class-body { font-size: 16px; } .simple-class { font-size: 16px; }';
     const expected = 'body { font-size: 16px; } .class-body { font-size: 0.16rem; } .simple-class { font-size: 0.16rem; }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       selectorBlackList: [/^body$/],
     };
     const processed = postcss(px2rem(options)).process(rules).css;
@@ -167,7 +166,7 @@ describe('selectorBlackList', () => {
 
 describe('ignoreIdentifier', () => {
   it('should not replace px when ignoreIdentifier enabled', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       ignoreIdentifier: '00',
     };
     const input = 'h1 { margin: 0 0 00.5px 16px; border-width: 001px; font-size: 32px; font-family: "16px"; }';
@@ -180,7 +179,7 @@ describe('ignoreIdentifier', () => {
 
 describe('replace', () => {
   it('should leave fallback pixel unit with root em value', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       replace: false,
     };
     const processed = postcss(px2rem(options)).process(basicCSS).css;
@@ -192,7 +191,7 @@ describe('replace', () => {
 
 describe('mediaQuery', () => {
   it('should replace px in media queries', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       mediaQuery: true,
     };
     const processed = postcss(px2rem(options)).process('@media (min-width: 500px) { .rule { font-size: 16px } }').css;
@@ -204,7 +203,7 @@ describe('mediaQuery', () => {
 
 describe('minPixelValue', () => {
   it('should not replace values below minPixelValue', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       propWhiteList: [],
       minPixelValue: 2,
     };
@@ -228,7 +227,7 @@ describe('rpx support', function () {
   });
 
   it('should replace rpx in media queries', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       mediaQuery: true,
       rootValue: { px: 50, rpx: 100 },
     };
@@ -241,7 +240,7 @@ describe('rpx support', function () {
   it('should ignore selectors in the selector black list', () => {
     const rules = '.rule { font-size: 15rpx } .rule2 { font-size: 15px }';
     const expected = '.rule { font-size: 0.15rem } .rule2 { font-size: 15px }';
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       selectorBlackList: ['.rule2'],
       rootValue: { px: 50, rpx: 100 },
     };
@@ -251,7 +250,7 @@ describe('rpx support', function () {
   });
 
   it('should not replace px when ignoreIdentifier enabled', () => {
-    const options: FunctionOptions = {
+    const options: FunctionalOptions = {
       ignoreIdentifier: '00',
       rootValue: { px: 100, rpx: 100 },
     };
