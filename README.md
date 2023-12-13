@@ -49,7 +49,7 @@ h1 {
 ```javascript
 import { writeFile, readFileSync } from "fs";
 import postcss from "postcss";
-import pxtorem from "postcss-plugin-px2rem";
+import pxtorem from "postcss-plugin-px2rem-ts";
 
 const css = readFileSync("/path/to/test.css", "utf8");
 const options = {
@@ -159,6 +159,8 @@ postcss-plugin-px2rem basic configuration like bellow.
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
+
+
 in postcss-plugin-px2rem-ts  optionsType is `FunctionalOptions`
 ```typescript
 type FunctionalExtend<T> = { [Key in keyof T]: T[Key] | ((root: any) => T[Key]) };
@@ -168,7 +170,7 @@ type Options = {
   selectorBlackList?: (string | RegExp)[];
   propWhiteList?: (string | RegExp)[];
   propBlackList?: (string | RegExp)[];
-  ignoreIdentifier?: boolean | string | RegExp;
+  ignoreIdentifier?: boolean | string;
   replace?: boolean;
   mediaQuery?: boolean;
   minPixelValue?: number;

@@ -10,6 +10,10 @@
     "build": "webpack --mode=production --node-env=production && tsc",
     "watch": "webpack --watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gongwannan/postcss-plugin-px2rem-ts"
+  },
   "keywords": [
     "postcss",
     "plugin",
@@ -19,6 +23,12 @@
     "vant",
     "px",
     "rem"
+  ],
+  "files": [
+    "dist",
+    "index.js",
+    "package.json",
+    "README.main"
   ],
   "license": "MIT",
   "devDependencies": {
