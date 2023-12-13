@@ -1,6 +1,6 @@
 {
   "name": "postcss-plugin-px2rem-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ts rewrite postcss-plugin-px2rem and custom for different files",
   "main": "index.js",
   "module": "index.mjs",
