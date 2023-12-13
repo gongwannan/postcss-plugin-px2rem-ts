@@ -116,6 +116,6 @@ const px2rem = (options?: FunctionalOptions): Plugin => {
 }
 
 export default px2rem
-export { Options, FunctionalOptions }
+export { px2rem, Options, FunctionalOptions }
 
 

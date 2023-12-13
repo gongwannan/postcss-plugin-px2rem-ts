@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Ts rewrite postcss-plugin-px2rem and custom for different files",
   "main": "index.js",
+  "module": "index.mjs",
   "types": "dist/index.d.ts",
   "author": "GongWannan gongwannan@qq.com",
   "scripts": {
@@ -27,6 +28,7 @@
   "files": [
     "dist",
     "index.js",
+    "index.mjs",
     "package.json",
     "README.main"
   ],
